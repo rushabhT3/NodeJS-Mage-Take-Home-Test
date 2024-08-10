@@ -11,14 +11,14 @@ Instructions to run the code on a local machine:
    b. Ensure you have Node.js installed on your machine.
 
    c. To run the server:
-```bash
+   ```bash
    node main.js
-```
+   ```
 
    d. In a separate terminal, to run the client:
-```bash
+   ```bash
    node client3.js
-```
+   ```
 
    e. The client will connect to the server, request data, and generate a 'stock_data.json' file in the same directory.
 
