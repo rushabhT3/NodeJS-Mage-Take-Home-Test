@@ -68,7 +68,7 @@ function requestAllPackets() {
 
     client.on("data", (data) => {
       for (let i = 0; i < data.length; i += PACKET_SIZE) {
-        const packetBuffer = data.slice(i, i + PACKET_SIZE);
+        const packetBuffer = data.subarray(i, i + PACKET_SIZE);
         try {
           const packet = parsePacket(packetBuffer);
           if (validatePacket(packet)) {
