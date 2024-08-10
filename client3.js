@@ -18,6 +18,10 @@ const PACKET_SIZE = PACKET_CONTENTS.reduce(
 );
 
 function parsePacket(buffer) {
+  if (buffer.length !== PACKET_SIZE) {
+    throw new Error(`Invalid packet size: ${buffer.length}`);
+  }
+
   let offset = 0;
   const packet = {};
 
@@ -32,6 +36,17 @@ function parsePacket(buffer) {
   });
 
   return packet;
+}
+
+function validatePacket(packet) {
+  if (typeof packet !== "object") return false;
+  if (packet.symbol.length !== 4) return false;
+  if (!["B", "S"].includes(packet.buysellindicator)) return false;
+  if (!Number.isInteger(packet.quantity) || packet.quantity <= 0) return false;
+  if (!Number.isInteger(packet.price) || packet.price <= 0) return false;
+  if (!Number.isInteger(packet.packetSequence) || packet.packetSequence <= 0)
+    return false;
+  return true;
 }
 
 function createRequestPayload(callType, resendSeq = 0) {
@@ -53,9 +68,17 @@ function requestAllPackets() {
 
     client.on("data", (data) => {
       for (let i = 0; i < data.length; i += PACKET_SIZE) {
-        const packetBuffer = data.subarray(i, i + PACKET_SIZE);
-        const packet = parsePacket(packetBuffer);
-        packets.push(packet);
+        const packetBuffer = data.slice(i, i + PACKET_SIZE);
+        try {
+          const packet = parsePacket(packetBuffer);
+          if (validatePacket(packet)) {
+            packets.push(packet);
+          } else {
+            console.error("Invalid packet:", packet);
+          }
+        } catch (error) {
+          console.error("Error parsing packet:", error.message);
+        }
       }
     });
 
@@ -150,6 +173,16 @@ async function main() {
     const sortedPackets = allPackets.sort(
       (a, b) => a.packetSequence - b.packetSequence
     );
+
+    // Verify complete sequence
+    const finalSequences = sortedPackets.map((p) => p.packetSequence);
+    const expectedSequences = Array.from(
+      { length: maxSequence },
+      (_, i) => i + 1
+    );
+    if (!expectedSequences.every((seq) => finalSequences.includes(seq))) {
+      console.error("Warning: Not all sequences are present in the final data");
+    }
 
     const outputFileName = "stock_data.json";
     await fs.writeFile(outputFileName, JSON.stringify(sortedPackets, null, 2));
