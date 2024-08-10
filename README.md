@@ -3,7 +3,7 @@
 Instructions to run the code on a local machine:
 
    a. Clone the repository:
-      ```sh
+      ```bash
       git clone https://github.com/rushabhT3/NodeJS-Mage-Take-Home-Test.git
       cd NodeJS-Mage-Take-Home-Test
       ```
@@ -11,12 +11,12 @@ Instructions to run the code on a local machine:
    b. Ensure you have Node.js installed on your machine.
 
    c. To run the server:
-      ```sh
+      ```bash
       node main.js
       ```
 
    d. In a separate terminal, to run the client:
-      ```sh
+      ```bash
       node client3.js
       ```
 
