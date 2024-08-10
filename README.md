@@ -4,21 +4,21 @@ Instructions to run the code on a local machine:
 
    a. Clone the repository:
 ```bash
-git clone https://github.com/rushabhT3/NodeJS-Mage-Take-Home-Test.git
-cd NodeJS-Mage-Take-Home-Test
+   git clone https://github.com/rushabhT3/NodeJS-Mage-Take-Home-Test.git
+   cd NodeJS-Mage-Take-Home-Test
 ```
 
    b. Ensure you have Node.js installed on your machine.
 
    c. To run the server:
-      ```bash
-      node main.js
-      ```
+```bash
+   node main.js
+```
 
    d. In a separate terminal, to run the client:
-      ```bash
-      node client3.js
-      ```
+```bash
+   node client3.js
+```
 
    e. The client will connect to the server, request data, and generate a 'stock_data.json' file in the same directory.
 
